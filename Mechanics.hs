@@ -1,43 +1,43 @@
-z = 0.1  -- Arm mass
-l = 0.2  -- Cargo arm length
-k = 0.3  -- Missile arm length
-p1 = 0.05  -- Missile initial height
-m = 0.1  -- Missile mass
-m2 = 0.7  -- Cargo mass
-h = 0.1  -- Axis height
+armMass = 0.1  -- z
+cargoArmLength = 0.2  -- ml
+missileArmLength = 0.3  -- mk
+missileInitialHeight = 0.05  -- p1
+missileMass = 0.1  -- m
+cargoMass = 0.7  -- m2
+axisHeight = 0.1  -- h
 g = 9.8
 
-q = (l + k + s) * h / (k + s)  -- Cargo height
-    where s = k * p1 / (h - p1)
+cargoHeight = (cargoArmLength + missileArmLength + s) * axisHeight / (missileArmLength + s)  -- q
+    where s = missileArmLength * missileInitialHeight / (axisHeight - missileInitialHeight)
 
-p2 = (l + k) * h / l  -- Missile height on detach
+missileHeightOnDetach = (cargoArmLength + missileArmLength) * axisHeight / cargoArmLength  -- p2
 
-ml = z * l / (l + k)  -- Cargo arm mass
-mk = z * k / (l + k)  -- Missile arm mass
+cargoArmMass = armMass * cargoArmLength / (cargoArmLength + missileArmLength)  -- ml
+missileArmMass = armMass * missileArmLength / (cargoArmLength + missileArmLength)  -- mk
 
-pd = p2 - p1  -- Missile height difference
+missileHeightDifference = missileHeightOnDetach - missileInitialHeight  -- pd
 
-ep = term1 + term2 - term3 - term4   -- Potential energy
+potentialEnergyDifference = cargoEnegry + cargoArmEnergy - missileEnergy - missileArmEnergy   -- Ep
     where
-        term1 = m2 * g * q
-        term2 = ml * g * q / 2
-        term3 = m * g * pd
-        term4 = mk * g * pd / 2
+        cargoEnegry = cargoMass * g * cargoHeight
+        cargoArmEnergy = cargoArmMass * g * cargoHeight / 2
+        missileEnergy = missileMass * g * missileHeightDifference
+        missileArmEnergy = missileArmMass * g * missileHeightDifference / 2
 
-v = sqrt $ ep / denominator  -- Velocity
+velocity = sqrt $ potentialEnergyDifference / coefSum  -- v
     where
-        denominator = term1 + term2 + term3 + term4
-        term1 = m / 2
-        term2 = m2 * l / k
-        term3 = mk / 4
-        term4 = ml * l**2 / (4 * k ** 2)
+        coefSum =  missileCoef + cargoCoef + missileArgCoef + cargoArmCoef
+        missileCoef = missileMass / 2
+        cargoCoef = cargoMass * cargoArmLength / missileArmLength
+        missileArgCoef = missileArmMass / 4
+        cargoArmCoef = cargoArmMass * cargoArmLength**2 / (4 * missileArmLength ** 2)
 
-phi = asin $ h / l  -- Arm to floor angle
+armToFloorAngle = asin $ axisHeight / cargoArmLength  -- psi
 
-alpha = pi / 2 - phi  -- Missile velocity to floor angle
+velocityToFloorAngle = pi / 2 - armToFloorAngle  -- alpha
 
-d = v**2 * sin alpha ** 2 + 2 * g * p2  -- Discriminant from time equation
+flightTime = velocity * sin velocityToFloorAngle + sqrt d / g  -- t
+    where
+        d = velocity**2 * sin velocityToFloorAngle ** 2 + 2 * g * missileHeightOnDetach
 
-t = v * sin alpha + sqrt d / g  -- Flight time
-
-distance = v * cos alpha * t  -- Throw distance
+distance = velocity * cos velocityToFloorAngle * flightTime
