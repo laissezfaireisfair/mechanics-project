@@ -10,7 +10,6 @@ g = 9.8
 q = (l + k + s) * h / (k + s)  -- Cargo height
     where s = k * p1 / (h - p1)
 
-
 p2 = (l + k) * h / l  -- Missile height on detach
 
 ml = z * l / (l + k)  -- Cargo arm mass
@@ -18,10 +17,10 @@ mk = z * k / (l + k)  -- Missile arm mass
 
 pd = p2 - p1  -- Missile height difference
 
-ep = term1 + term2 + term3 + term4   -- Potential energy
+ep = term1 + term2 - term3 - term4   -- Potential energy
     where
         term1 = m2 * g * q
-        term2 = ml * q / 2
+        term2 = ml * g * q / 2
         term3 = m * g * pd
         term4 = mk * g * pd / 2
 
@@ -29,9 +28,9 @@ v = sqrt $ ep / denominator  -- Velocity
     where
         denominator = term1 + term2 + term3 + term4
         term1 = m / 2
-        term2 = l**2 / (2 * m)
-        term3 = mk * l**2 / (4 * m**2)
-        term4 = ml / 4
+        term2 = m2 * l / k
+        term3 = mk / 4
+        term4 = ml * l**2 / (4 * k ** 2)
 
 phi = asin $ h / l  -- Arm to floor angle
 
