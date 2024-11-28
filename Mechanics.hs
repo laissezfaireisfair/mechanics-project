@@ -1,10 +1,10 @@
-armMass = 0.1  -- z
-cargoArmLength = 0.2  -- ml
-missileArmLength = 0.3  -- mk
+armMass = 0.2  -- z
+cargoArmLength = 0.1  -- ml
+missileArmLength = 0.2  -- mk
 missileInitialHeight = 0.05  -- p1
-missileMass = 0.1  -- m
-cargoMass = 0.7  -- m2
-axisHeight = 0.1  -- h
+missileMass = 0.2  -- m
+cargoMass = 1.0  -- m2
+axisHeight = 0.07  -- h
 g = 9.8
 
 cargoHeight = (cargoArmLength + missileArmLength + s) * axisHeight / (missileArmLength + s)  -- q
