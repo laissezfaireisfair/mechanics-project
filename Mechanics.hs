@@ -1,9 +1,9 @@
-armMass = 0.2  -- z
+armMass = 0.143  -- z
 cargoArmLength = 0.1  -- ml
 missileArmLength = 0.2  -- mk
 missileInitialHeight = 0.05  -- p1
-missileMass = 0.2  -- m
-cargoMass = 1.0  -- m2
+missileMass = 0.01  -- m
+cargoMass = 0.242  -- m2
 axisHeight = 0.07  -- h
 g = 9.8
 
