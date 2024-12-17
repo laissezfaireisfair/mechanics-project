@@ -16,7 +16,7 @@ missileMass :: Double
 missileMass = 0.01  -- m
 
 cargoMass :: Double
-cargoMass = 0.242  -- m2
+cargoMass = 0.177  -- m2
 
 axisHeight :: Double
 axisHeight = 0.07  -- h
@@ -63,13 +63,28 @@ velocityToFloorAngle :: Double
 velocityToFloorAngle = pi / 2 - armToFloorAngle  -- alpha
 
 flightTime :: Double
-flightTime = velocity * sin velocityToFloorAngle + sqrt d / g  -- t
+flightTime = (velocity * sin velocityToFloorAngle + sqrt d) / g  -- t
     where
         d = velocity**2 * sin velocityToFloorAngle ** 2 + 2 * g * missileHeightOnDetach
 
-distance :: Double
-distance = velocity * cos velocityToFloorAngle * flightTime
+
+measurements :: Int
+measurements = 10
+
+times :: [Double]
+times = [fromIntegral m * step | m <- [0..measurements]]
+    where
+        step = flightTime / fromIntegral measurements
+
+distance :: Double -> Double
+distance t = velocity * cos velocityToFloorAngle * t
+
+height :: Double -> Double
+height t = missileHeightOnDetach + velocity * sin velocityToFloorAngle * t - (g * t ** 2) / 2
 
 main :: IO ()
 main = do
-    print distance
+    putStrLn "Heights:"
+    putStrLn $ concatMap (((++"\n") . show) . height) times
+    putStrLn "Distances:"
+    putStrLn $ concatMap (((++"\n") . show) . distance) times
